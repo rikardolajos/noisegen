@@ -22,7 +22,7 @@ static float smooth_noise(int x, int y)
 	return corners + sides + center;
 }
 
-static float value_noise(float x, float y)
+float value_noise(float x, float y)
 {
 	int ix = int(x);
 	int iy = int(y);

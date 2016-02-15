@@ -1,13 +1,14 @@
 #include "fbm.h"
+#include "worley.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
 
-#define FILENAME "terrain.ex5"
+#define FILENAME "worley.ex5"
 
-#define THREE_D 0
+#define THREE_D 1
 
 #define WIDTH 128
 #define HEIGHT 128
@@ -43,15 +44,20 @@ int main(int argc, char** argv)
 				float y = (float)i * freq;
 				float z = (float)d * freq;
 
-				int r = (int)((fbm_perlin(x, y, z, 1, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				int g = (int)((fbm_perlin(x, y, z, 2, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				int b = (int)((fbm_perlin(x, y, z, 5, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				int a = (int)((fbm_perlin(x, y, z, 8, (int)(128 * freq)) * 0.5 + 0.5) * 255);
+				//int r = (int)((fbm_perlin(x, y, z, 1, (int)(128 * freq)) * 0.5 + 0.5) * 255);
+				//int g = (int)((fbm_perlin(x, y, z, 2, (int)(128 * freq)) * 0.5 + 0.5) * 255);
+				//int b = (int)((fbm_perlin(x, y, z, 5, (int)(128 * freq)) * 0.5 + 0.5) * 255);
+				//int a = (int)((fbm_perlin(x, y, z, 8, (int)(128 * freq)) * 0.5 + 0.5) * 255);
 
 				//int r = x * 0xff;
 				//int g = y * 0xff;
 				//int b = z * 0xff;
 				//int a = 0xff;
+
+				int r = (int)(worley_noise(x, y, z) * 255);
+				int g = 0;
+				int b = 0;
+				int a = 0;
 
 				uint32_t pixel = 0;
 

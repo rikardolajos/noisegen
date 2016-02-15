@@ -2,7 +2,6 @@
 
 #include "value.h"
 #include "perlin.h"
-#include "worley.h"
 
 #include <math.h>
 
