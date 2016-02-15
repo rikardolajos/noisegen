@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 				//int b = z * 0xff;
 				//int a = 0xff;
 
-				int r = (int)(worley_noise(x, y, z) * 255);
+				int r = (int)((fbm_worley(x, y, z, 1, (int)(128 * freq)) * 0.5 + 0.5) * 255);
 				int g = 0;
 				int b = 0;
 				int a = 0;
