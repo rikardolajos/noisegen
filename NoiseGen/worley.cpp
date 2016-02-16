@@ -16,9 +16,9 @@ int hash(int x, int y, int z)
 // https://aftbit.com/cell-noise-2/
 float worley_noise(float x, float y, float z, int period)
 {
-	x = x > period ? x - period : x;
-	y = y > period ? y - period : y;
-	z = z > period ? z - period : z;
+	//x = x > period ? x - period : x;
+	//y = y > period ? y - period : y;
+	//z = z > period ? z - period : z;
 
 	/* Determine which cube the evaluation point is in */
 	int xi = (int)floor(x);
@@ -33,11 +33,11 @@ float worley_noise(float x, float y, float z, int period)
 		for (int j = -1; j < 2; j++) {
 			for (int k = -1; k < 2; k++) {
 				
-				current_cube_x = mod(xi + i, period);
-				current_cube_y = mod(yi + j, period);
-				current_cube_z = mod(zi + k, period);
+				current_cube_x = xi + i;
+				current_cube_y = yi + j;
+				current_cube_z = zi + k;
 
-				int hash_code = hash(current_cube_x % period, current_cube_y % period, current_cube_z % period);
+				int hash_code = hash(mod(current_cube_x, period), mod(current_cube_y, period), mod(current_cube_z, period));
 
 				/* Determine how many feature points this cube has (1-2) */
 				int points = hash_code % 2 + 1;
