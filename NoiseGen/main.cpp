@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define FILENAME "worley.ex5"
+#define FILENAME "3D_texture_1.ex5"
 
 #define THREE_D 1
 
@@ -38,26 +38,29 @@ int main(int argc, char** argv)
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 
-				float freq = 1.0 / 32.0;
+				float freq1 = 1.0 / 8.0;
+				float freq2 = 1.0 / 16.0;
+				float freq3 = 1.0 / 32.0;
 
-				float x = (float)j * freq;
-				float y = (float)i * freq;
-				float z = (float)d * freq;
+				float x1 = (float)j * freq1;
+				float y1 = (float)i * freq1;
+				float z1 = (float)d * freq1;
 
-				//int r = (int)((fbm_perlin(x, y, z, 1, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				//int g = (int)((fbm_perlin(x, y, z, 2, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				//int b = (int)((fbm_perlin(x, y, z, 5, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				//int a = (int)((fbm_perlin(x, y, z, 8, (int)(128 * freq)) * 0.5 + 0.5) * 255);
+				float x2 = (float)j * freq2;
+				float y2 = (float)i * freq2;
+				float z2 = (float)d * freq2;
 
-				//int r = x * 0xff;
-				//int g = y * 0xff;
-				//int b = z * 0xff;
-				//int a = 0xff;
+				float x3 = (float)j * freq3;
+				float y3 = (float)i * freq3;
+				float z3 = (float)d * freq3;
 
-				int r = (int)((fbm_worley(x, y, z, 4, (int)(128 * freq)) * 0.5 + 0.5) * 255);
-				int g = 0;
-				int b = 0;
-				int a = 0;
+				float p = fbm_perlin(x2, y2, z2, 5, (int)(128 * freq2));
+				float w = fbm_worley(x3, y3, z3, 5, (int)(128 * freq3));
+
+				int r = (int)(((0.4 * p + 0.6 * w) * 0.5 + 0.5) * 255);
+				int g = (int)((w * 0.5 + 0.5) * 255);
+				int b = (int)((fbm_worley(x2, y2, z2, 5, (int)(128 * freq2)) * 0.5 + 0.5) * 255);
+				int a = (int)((fbm_worley(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255);
 
 				uint32_t pixel = 0;
 
@@ -67,9 +70,11 @@ int main(int argc, char** argv)
 				pixel |= a <<  0;
 
 				fprintf(fp, "%u ", pixel);
+				
 			}
 			fprintf(fp, "\n");
 		}
+		printf("\b\b\b\b\b\b%3.1f %%", 100 * (float)d / (float)DEPTH);
 	}
 	
 

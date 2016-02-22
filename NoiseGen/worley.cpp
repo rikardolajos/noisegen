@@ -39,11 +39,12 @@ float worley_noise(float x, float y, float z, int period)
 
 				int hash_code = hash(mod(current_cube_x, period), mod(current_cube_y, period), mod(current_cube_z, period));
 
-				/* Determine how many feature points this cube has (1-2) */
-				int points = hash_code % 2 + 1;
+				///* Determine how many feature points this cube has (1-2) */
+				//int points = hash_code % 2 + 1;
 
-				/* Look for the shortest distance from evaluation point to feature point */
-				for (int p = 2; p <= points + 1; p++) {
+				///* Look for the shortest distance from evaluation point to feature point */
+				//for (int p = 2; p <= points + 1; p++) {
+				int p = 2;
 					float feature_x = (float)current_cube_x + (float)(mod(p * hash_code * 5783, 256)) / 256.0;
 					float feature_y = (float)current_cube_y + (float)(mod(p * hash_code * 9419, 256)) / 256.0;
 					float feature_z = (float)current_cube_z + (float)(mod(p * hash_code * 2753, 256)) / 256.0;
@@ -51,15 +52,18 @@ float worley_noise(float x, float y, float z, int period)
 					float distance = sqrtf((feature_x - x) * (feature_x - x) + (feature_y - y) * (feature_y - y) + (feature_z - z) * (feature_z - z));
 					if (distance < shortest_distance) {
 						shortest_distance = distance;
-					}
+					//}
 				}
 			}
 		}
 	}
 
 	/* The inverse of the shortest distance normalized with the theoretical maximum */
-	//float inv = 1.0f - shortest_distance * 0.57735;
-	float inv = 1.0f - shortest_distance * 0.707;
+	float inv = 1.0f - shortest_distance;
+
+	if (inv < 0.0) {
+		inv = 0.0;
+	}
 
 	/* Change from 0 - 1 to -1 - 1*/
 	return inv * 2.0f - 1.0f;
