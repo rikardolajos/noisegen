@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <math.h>
 
-#define FILENAME "3D_texture_1.ex5"
+#define FILENAME "noise1.ex5"
 
 #define THREE_D 1
 
@@ -16,6 +17,11 @@
 #if THREE_D
 #define DEPTH 128
 #endif
+
+float height_distribution(float x)
+{
+	return (1 - exp(-50 * x)) * exp(-4 * x);
+}
 
 /* Main function */
 int main(int argc, char** argv)
@@ -57,7 +63,7 @@ int main(int argc, char** argv)
 				float p = fbm_perlin(x2, y2, z2, 5, (int)(128 * freq2));
 				float w = fbm_worley(x3, y3, z3, 5, (int)(128 * freq3));
 
-				int r = (int)(((0.4 * p + 0.6 * w) * 0.5 + 0.5) * 255);
+				int r = (int)((p * 0.5 + 0.5) * 255) * height_distribution((float)i/HEIGHT);
 				int g = (int)((w * 0.5 + 0.5) * 255);
 				int b = (int)((fbm_worley(x2, y2, z2, 5, (int)(128 * freq2)) * 0.5 + 0.5) * 255);
 				int a = (int)((fbm_worley(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255);
