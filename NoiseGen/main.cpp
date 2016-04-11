@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#define FILENAME "noise1.ex5"
+#define FILENAME "noise2.ex5"
 
 #define THREE_D 1
 
@@ -18,9 +18,16 @@
 #define DEPTH 128
 #endif
 
-float height_distribution(float x)
+float gauss2(float amp, float x, float y, float mu_x, float mu_y, float sigma2_x, float sigma2_y)
 {
-	return (1 - exp(-50 * x)) * exp(-4 * x);
+	return amp * exp(-(pow((x - mu_x), 2.0f)) / (2 * sigma2_x) - pow((y - mu_y), 2.0f) / (2 * sigma2_y));
+}
+
+float height_distribution(float x, float y, float z)
+{
+	float base_height = (1 - exp(-50 * y)) * exp(-4 * y);
+	float tower_height = gauss2(0.4, x, z, 0.2, 0.3, 0.001, 0.004) + gauss2(0.3, x, z, 0.6, 0.2, 0.01, 0.004) + gauss2(0.2, x, z, 0.3, 0.8, 0.008, 0.002);
+	return base_height + tower_height;
 }
 
 /* Main function */
@@ -63,7 +70,7 @@ int main(int argc, char** argv)
 				float p = fbm_perlin(x2, y2, z2, 5, (int)(128 * freq2));
 				float w = fbm_worley(x3, y3, z3, 5, (int)(128 * freq3));
 
-				int r = (int)((p * 0.5 + 0.5) * 255) * height_distribution((float)i/HEIGHT);
+				int r = (int)((p * 0.5 + 0.5) * 255) * height_distribution((float)d / DEPTH, (float)i / HEIGHT, (float)j / WIDTH);
 				int g = (int)((w * 0.5 + 0.5) * 255);
 				int b = (int)((fbm_worley(x2, y2, z2, 5, (int)(128 * freq2)) * 0.5 + 0.5) * 255);
 				int a = (int)((fbm_worley(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255);
