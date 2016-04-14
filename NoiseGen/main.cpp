@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#define FILENAME "noise2.ex5"
+#define FILENAME "noise3.ex5"
 
 #define THREE_D 1
 
@@ -26,7 +26,7 @@ float gauss2(float amp, float x, float y, float mu_x, float mu_y, float sigma2_x
 float height_distribution(float x, float y, float z)
 {
 	float base_height = (1 - exp(-50 * y)) * exp(-4 * y);
-	float tower_height = gauss2(0.4, x, z, 0.2, 0.3, 0.001, 0.004) + gauss2(0.3, x, z, 0.6, 0.2, 0.01, 0.004) + gauss2(0.2, x, z, 0.3, 0.8, 0.008, 0.002);
+	float tower_height = gauss2(0.4, x, z, 0.2, 0.3, 0.001, 0.004) + gauss2(0.4, x, z, 0.6, 0.4, 0.008, 0.01) + gauss2(0.2, x, z, 0.3, 0.8, 0.008, 0.002);
 	return base_height + tower_height;
 }
 
@@ -51,9 +51,9 @@ int main(int argc, char** argv)
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 
-				float freq1 = 1.0 / 8.0;
-				float freq2 = 1.0 / 16.0;
-				float freq3 = 1.0 / 32.0;
+				float freq1 = 1.0 / 32.0;
+				float freq2 = 1.0 / 8.0;
+				float freq3 = 1.0 / 1.0;
 
 				float x1 = (float)j * freq1;
 				float y1 = (float)i * freq1;
@@ -67,13 +67,10 @@ int main(int argc, char** argv)
 				float y3 = (float)i * freq3;
 				float z3 = (float)d * freq3;
 
-				float p = fbm_perlin(x2, y2, z2, 5, (int)(128 * freq2));
-				float w = fbm_worley(x3, y3, z3, 5, (int)(128 * freq3));
-
-				int r = (int)((p * 0.5 + 0.5) * 255) * height_distribution((float)d / DEPTH, (float)i / HEIGHT, (float)j / WIDTH);
-				int g = (int)((w * 0.5 + 0.5) * 255);
+				int g = (int)((fbm_perlin(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255) * height_distribution((float)d / DEPTH, (float)i / HEIGHT, (float)j / WIDTH);
+				int r = (int)((fbm_worley(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255) * height_distribution((float)d / DEPTH, (float)i / HEIGHT, (float)j / WIDTH);;
 				int b = (int)((fbm_worley(x2, y2, z2, 5, (int)(128 * freq2)) * 0.5 + 0.5) * 255);
-				int a = (int)((fbm_worley(x1, y1, z1, 5, (int)(128 * freq1)) * 0.5 + 0.5) * 255);
+				int a = (int)((fbm_worley(x3, y3, z3, 5, (int)(128 * freq3)) * 0.5 + 0.5) * 255);
 
 				uint32_t pixel = 0;
 
